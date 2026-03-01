@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Playlist Uploader for Spotify</title>
+    <!-- OG Meta Tags for social sharing -->
+    <meta property="og:title" content="Playlist Uploader for Spotify">
+    <meta property="og:description" content="Upload a CSV, JSON, or text playlist and push it straight to your Spotify account. No backend, no secrets stored.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://osgk.com/spotify">
+    <meta name="description" content="Upload a playlist file and push it straight to your Spotify account. Supports CSV, JSON, TXT, and clipboard paste.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231DB954'/><path d='M16 6C10.48 6 6 10.48 6 16s4.48 10 10 10 10-4.48 10-10S21.52 6 16 6zm4.59 14.45c-.2.3-.55.4-.86.2-2.35-1.44-5.3-1.76-8.78-.96-.34.08-.66-.14-.74-.46-.08-.34.14-.66.46-.74 3.82-.88 7.1-.5 9.72 1.1.3.18.4.56.2.86zm1.2-2.72c-.24.38-.74.5-1.12.24-2.68-1.66-6.78-2.14-9.94-1.16-.42.12-.86-.1-.98-.52-.12-.42.1-.86.52-.98 3.62-1.1 8.12-.56 11.22 1.34.36.22.48.72.3 1.08zm.1-2.84c-3.22-1.92-8.54-2.1-11.62-1.16-.5.16-1.02-.12-1.18-.62-.16-.5.12-1.02.62-1.18 3.54-1.08 9.42-.86 13.14 1.34.44.26.6.84.34 1.28-.26.4-.84.56-1.3.34z' fill='white'/></svg>" type="image/svg+xml">
+    <link rel="canonical" href="https://osgk.com/spotify">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet">
     <style>
@@ -40,9 +47,7 @@
             text-align: center;
         }
 
-        .logo-area {
-            margin-bottom: 3rem;
-        }
+        .logo-area { margin-bottom: 3rem; }
 
         .logo-area h1 {
             font-family: 'Instrument Serif', serif;
@@ -52,9 +57,7 @@
             margin-bottom: 0.5rem;
         }
 
-        .logo-area h1 span {
-            color: var(--spotify-green);
-        }
+        .logo-area h1 span { color: var(--spotify-green); }
 
         .logo-area p {
             color: var(--text-secondary);
@@ -86,15 +89,8 @@
             transition: all 0.2s ease;
         }
 
-        .login-btn:hover {
-            background: var(--spotify-green-hover);
-            transform: scale(1.03);
-        }
-
-        .login-btn svg {
-            width: 22px;
-            height: 22px;
-        }
+        .login-btn:hover { background: var(--spotify-green-hover); transform: scale(1.03); }
+        .login-btn svg { width: 22px; height: 22px; }
 
         .security-note {
             color: var(--text-dim);
@@ -122,28 +118,14 @@
         }
 
         .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
+            width: 32px; height: 32px; border-radius: 50%;
             background: var(--spotify-green);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: #000;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.85rem; color: #000;
         }
 
-        .user-name {
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .status-msg {
-            color: var(--spotify-green);
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
+        .user-name { font-size: 0.9rem; font-weight: 500; }
+        .status-msg { color: var(--spotify-green); font-size: 0.95rem; font-weight: 500; }
 
         .logout-btn {
             background: none;
@@ -157,12 +139,9 @@
             transition: all 0.2s ease;
         }
 
-        .logout-btn:hover {
-            border-color: var(--text-secondary);
-            color: var(--text-primary);
-        }
+        .logout-btn:hover { border-color: var(--text-secondary); color: var(--text-primary); }
 
-        /* Upload Section Placeholder */
+        /* Upload Section */
         .upload-area {
             width: 100%;
             border: 2px dashed var(--border);
@@ -171,120 +150,99 @@
             color: var(--text-dim);
             font-size: 0.9rem;
             transition: border-color 0.2s;
+            cursor: pointer;
         }
 
-        .upload-area:hover {
-            border-color: var(--text-secondary);
-        }
+        .upload-area:hover { border-color: var(--text-secondary); }
+        .upload-area.drag-over { border-color: var(--spotify-green); background: rgba(29, 185, 84, 0.05); }
 
-        .upload-area.drag-over {
-            border-color: var(--spotify-green);
-            background: rgba(29, 185, 84, 0.05);
-        }
+        .upload-icon { color: var(--text-dim); margin-bottom: 0.75rem; }
+        .upload-text { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .upload-hint { color: var(--text-dim); font-size: 0.8rem; }
 
-        .upload-icon {
-            color: var(--text-dim);
-            margin-bottom: 0.75rem;
+        /* Paste Area */
+        .paste-toggle {
+            background: none; border: none; color: var(--text-dim);
+            font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+            cursor: pointer; text-decoration: underline; margin-top: 0.5rem;
+            transition: color 0.2s;
         }
+        .paste-toggle:hover { color: var(--text-secondary); }
 
-        .upload-text {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 0.25rem;
+        .paste-area {
+            width: 100%; display: none;
+            margin-top: 0.5rem;
         }
-
-        .upload-hint {
-            color: var(--text-dim);
-            font-size: 0.8rem;
+        .paste-area textarea {
+            width: 100%; min-height: 120px; padding: 0.75rem 1rem;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 10px; color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+            resize: vertical; outline: none;
+        }
+        .paste-area textarea:focus { border-color: var(--spotify-green); }
+        .paste-area textarea::placeholder { color: var(--text-dim); }
+        .paste-actions {
+            display: flex; gap: 0.5rem; margin-top: 0.5rem; justify-content: flex-end;
+        }
+        .paste-btn {
+            background: var(--spotify-green); color: #000; border: none;
+            padding: 0.5rem 1rem; border-radius: 50px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+            font-weight: 600; cursor: pointer;
+        }
+        .paste-btn:hover { background: var(--spotify-green-hover); }
+        .paste-btn.secondary {
+            background: none; border: 1px solid var(--border); color: var(--text-secondary);
         }
 
         /* Playlist Name Input */
-        .playlist-name-group {
-            width: 100%;
-            text-align: left;
-        }
+        .playlist-name-group { width: 100%; text-align: left; }
 
         .playlist-name-group label {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.4rem;
-            font-weight: 500;
+            display: block; font-size: 0.8rem;
+            color: var(--text-secondary); margin-bottom: 0.4rem; font-weight: 500;
         }
 
         .playlist-name-group input {
-            width: 100%;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
-            color: var(--text-primary);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.95rem;
-            outline: none;
+            width: 100%; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: 10px;
+            padding: 0.75rem 1rem; color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none;
             transition: border-color 0.2s;
         }
 
-        .playlist-name-group input:focus {
-            border-color: var(--spotify-green);
-        }
-
-        .playlist-name-group input::placeholder {
-            color: var(--text-dim);
-        }
+        .playlist-name-group input:focus { border-color: var(--spotify-green); }
+        .playlist-name-group input::placeholder { color: var(--text-dim); }
 
         /* Track Preview */
-        #preview-section {
-            width: 100%;
-        }
+        #preview-section { width: 100%; }
 
         .preview-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 0.75rem;
         }
 
-        .preview-header span {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
+        .preview-header span { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
 
         .clear-btn {
-            background: none;
-            border: none;
-            color: var(--text-dim);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: color 0.2s;
+            background: none; border: none; color: var(--text-dim);
+            font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+            cursor: pointer; transition: color 0.2s;
         }
-
-        .clear-btn:hover {
-            color: #e74c3c;
-        }
+        .clear-btn:hover { color: #e74c3c; }
 
         .track-list {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            max-height: 300px;
+            max-height: 350px;
             overflow-y: auto;
         }
 
-        .track-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .track-list::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .track-list::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 3px;
-        }
+        .track-list::-webkit-scrollbar { width: 6px; }
+        .track-list::-webkit-scrollbar-track { background: transparent; }
+        .track-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
         .track-row {
             display: flex;
@@ -292,89 +250,189 @@
             padding: 0.65rem 1rem;
             border-bottom: 1px solid var(--border);
             gap: 0.75rem;
+            transition: background 0.15s;
         }
 
-        .track-row:last-child {
-            border-bottom: none;
+        .track-row:last-child { border-bottom: none; }
+        .track-row.dragging { opacity: 0.4; background: var(--bg-dark); }
+        .track-row.drag-over-row { border-top: 2px solid var(--spotify-green); }
+
+        .drag-handle {
+            cursor: grab; color: var(--text-dim); font-size: 0.9rem;
+            user-select: none; flex-shrink: 0; padding: 0 0.15rem;
+            transition: color 0.15s;
         }
+        .drag-handle:hover { color: var(--text-secondary); }
+        .drag-handle:active { cursor: grabbing; }
 
         .track-num {
-            color: var(--text-dim);
-            font-size: 0.8rem;
-            min-width: 24px;
-            text-align: right;
+            color: var(--text-dim); font-size: 0.8rem;
+            min-width: 24px; text-align: right;
         }
 
         .track-info {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
+            display: flex; flex-direction: column;
+            text-align: left; flex: 1; min-width: 0;
         }
 
-        .track-title {
-            font-size: 0.9rem;
-            font-weight: 500;
+        .track-title { font-size: 0.9rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .track-artist { font-size: 0.8rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .match-detail {
+            display: flex; align-items: center; gap: 0.4rem; margin-top: 0.2rem;
+        }
+        .match-art {
+            width: 20px; height: 20px; border-radius: 2px;
+            object-fit: cover; flex-shrink: 0;
+        }
+        .match-text {
+            font-size: 0.72rem; color: var(--spotify-green);
+            opacity: 0.7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
 
-        .track-artist {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
+        /* Preview play button */
+        .preview-btn {
+            background: none; border: none; color: var(--text-dim);
+            font-size: 1rem; cursor: pointer; padding: 0.15rem;
+            flex-shrink: 0; transition: color 0.15s; line-height: 1;
         }
+        .preview-btn:hover { color: var(--spotify-green); }
+        .preview-btn.playing { color: var(--spotify-green); }
 
         .push-btn {
-            width: 100%;
-            margin-top: 1rem;
-            background: var(--spotify-green);
-            color: #000;
-            border: none;
-            padding: 0.9rem;
-            border-radius: 50px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            width: 100%; margin-top: 1rem;
+            background: var(--spotify-green); color: #000; border: none;
+            padding: 0.9rem; border-radius: 50px;
+            font-family: 'DM Sans', sans-serif; font-size: 1rem;
+            font-weight: 600; cursor: pointer; transition: all 0.2s ease;
         }
 
-        .push-btn:hover {
-            background: var(--spotify-green-hover);
-            transform: scale(1.02);
+        .push-btn:hover { background: var(--spotify-green-hover); transform: scale(1.02); }
+        .push-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* Undo/Delete button */
+        .undo-btn {
+            width: 100%; margin-top: 0.5rem;
+            background: none; color: #e74c3c; border: 1px solid #e74c3c44;
+            padding: 0.7rem; border-radius: 50px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+            font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+            display: none;
+        }
+        .undo-btn:hover { background: #e74c3c18; border-color: #e74c3c; }
+
+        /* Token Warning Banner */
+        .token-banner {
+            width: 100%; display: flex; align-items: center;
+            justify-content: space-between; gap: 0.75rem;
+            padding: 0.65rem 1rem; border-radius: 10px;
+            font-size: 0.85rem; font-weight: 500;
+            animation: slideDown 0.2s ease;
+        }
+        .token-expiring { background: rgba(241, 196, 15, 0.1); border: 1px solid rgba(241, 196, 15, 0.3); color: #f1c40f; }
+        .token-expired { background: rgba(231, 76, 60, 0.1); border: 1px solid rgba(231, 76, 60, 0.3); color: #e74c3c; }
+
+        .token-reauth-btn {
+            background: none; border: 1px solid currentColor; color: inherit;
+            padding: 0.35rem 0.85rem; border-radius: 50px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+            font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s;
+        }
+        .token-reauth-btn:hover { background: rgba(255, 255, 255, 0.1); }
+
+        /* Duplicate warning */
+        .dupe-banner {
+            width: 100%; text-align: center; padding: 0.75rem;
+            border-radius: 10px; font-size: 0.85rem;
+            background: rgba(241, 196, 15, 0.1); border: 1px solid rgba(241, 196, 15, 0.3);
+            color: #f1c40f; margin-bottom: 0.5rem; animation: slideDown 0.2s ease;
+        }
+        .dupe-banner button {
+            background: none; border: 1px solid #f1c40f; color: #f1c40f;
+            padding: 0.3rem 0.75rem; border-radius: 50px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.75rem;
+            font-weight: 600; cursor: pointer; margin-left: 0.5rem;
         }
 
-        .push-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+        .export-failed-btn {
+            background: none; border: 1px solid rgba(231, 76, 60, 0.35);
+            color: #e74c3c; padding: 0.3rem 0.85rem; border-radius: 50px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.75rem;
+            font-weight: 600; cursor: pointer; transition: all 0.2s; margin-left: 0.5rem;
         }
+        .export-failed-btn:hover { background: rgba(231, 76, 60, 0.1); border-color: #e74c3c; }
 
-        /* Footer */
-        .footer {
-            margin-top: 3rem;
-            color: var(--text-dim);
-            font-size: 0.75rem;
+        /* Fix Button in Track Rows */
+        .fix-btn {
+            background: none; border: 1px solid #e74c3c44; color: #e74c3c;
+            font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 600;
+            padding: 0.25rem 0.75rem; border-radius: 50px;
+            cursor: pointer; transition: all 0.2s ease;
+            margin-left: auto; white-space: nowrap;
         }
+        .fix-btn:hover { background: #e74c3c18; border-color: #e74c3c; }
+        .fix-btn.fixed { border-color: var(--spotify-green); color: var(--spotify-green); }
+        .fix-btn.fixed:hover { background: rgba(29, 185, 84, 0.1); }
 
-        .footer a {
-            color: var(--text-secondary);
-            text-decoration: none;
+        /* Fix Modal */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 1000;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center; padding: 1.5rem;
         }
+        .modal-box {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; width: 100%; max-width: 480px;
+            max-height: 80vh; display: flex; flex-direction: column; overflow: hidden;
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            padding: 1.25rem 1.25rem 1rem; border-bottom: 1px solid var(--border);
+        }
+        .modal-title-label {
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+            color: #e74c3c; font-weight: 600; margin-bottom: 0.25rem;
+        }
+        .modal-track-name { font-size: 1rem; font-weight: 600; color: var(--text-primary); }
+        .modal-track-artist { font-size: 0.85rem; color: var(--text-secondary); }
+        .modal-close {
+            background: none; border: none; color: var(--text-dim);
+            font-size: 1.5rem; cursor: pointer; padding: 0; line-height: 1;
+        }
+        .modal-close:hover { color: var(--text-primary); }
+        .modal-search {
+            display: flex; gap: 0.5rem; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border);
+        }
+        .modal-search input {
+            flex: 1; background: var(--bg-dark); border: 1px solid var(--border);
+            border-radius: 8px; padding: 0.6rem 0.85rem; color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none;
+        }
+        .modal-search input:focus { border-color: var(--spotify-green); }
+        .fix-search-btn {
+            background: var(--spotify-green); color: #000; border: none;
+            border-radius: 8px; padding: 0.6rem 1.25rem;
+            font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+            font-weight: 600; cursor: pointer; white-space: nowrap;
+        }
+        .fix-search-btn:hover { background: var(--spotify-green-hover); }
+        .fix-search-btn:disabled { opacity: 0.5; cursor: wait; }
+        .modal-results { overflow-y: auto; padding: 0.5rem; flex: 1; }
+        .modal-empty { text-align: center; padding: 2rem; color: var(--text-dim); font-size: 0.85rem; }
+        .modal-result-row {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.6rem 0.75rem; border-radius: 10px;
+            cursor: pointer; transition: background 0.15s; border: 1px solid transparent;
+        }
+        .modal-result-row:hover { background: rgba(29, 185, 84, 0.08); border-color: rgba(29, 185, 84, 0.2); }
+        .result-art { width: 44px; height: 44px; border-radius: 4px; background: var(--bg-dark); flex-shrink: 0; object-fit: cover; }
+        .result-info { flex: 1; min-width: 0; text-align: left; }
+        .result-track { font-size: 0.9rem; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .result-meta { font-size: 0.78rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .license {
-            margin-top: 0.75rem;
-            color: var(--text-dim);
-            font-size: 0.7rem;
-            text-align: center;
-        }
+        .footer { margin-top: 3rem; }
 
-        .license a {
-            color: var(--text-dim);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .license a:hover {
-            color: var(--text-secondary);
-        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -410,12 +468,20 @@
 
             <!-- File Upload -->
             <div class="upload-area" id="drop-zone" onclick="document.getElementById('file-input').click()">
-                <input type="file" id="file-input" accept=".csv" hidden>
+                <input type="file" id="file-input" accept=".csv,.json,.txt" hidden>
                 <div class="upload-icon">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 </div>
-                <p class="upload-text">Click or drop a <strong>.csv</strong> file</p>
-                <p class="upload-hint">Format: track, artist (one per row)</p>
+                <p class="upload-text">Click or drop a <strong>.csv</strong>, <strong>.json</strong>, or <strong>.txt</strong> file</p>
+                <p class="upload-hint">CSV: track, artist · JSON: [{track, artist}] · TXT: track - artist per line</p>
+            </div>
+            <button class="paste-toggle" onclick="togglePaste()">or paste from clipboard</button>
+            <div class="paste-area" id="paste-area">
+                <textarea id="paste-input" placeholder="Paste tracks here (one per line):&#10;track - artist&#10;track, artist"></textarea>
+                <div class="paste-actions">
+                    <button class="paste-btn secondary" onclick="togglePaste()">Cancel</button>
+                    <button class="paste-btn" onclick="handlePaste()">Load tracks</button>
+                </div>
             </div>
 
             <!-- Track Preview -->
@@ -428,17 +494,39 @@
                 <button class="push-btn" id="push-btn" onclick="pushToSpotify()">
                     Push to Spotify
                 </button>
+                <button class="undo-btn" id="undo-btn" onclick="undoLastPush()">
+                    Undo: Remove all tracks from playlist
+                </button>
             </div>
             <button class="logout-btn" onclick="logout()">Log out</button>
         </div>
 
-        <div class="footer">
-            Built by <a href="https://osgk.com">osgk.com</a>
+        <!-- Fix Track Modal -->
+        <div class="modal-overlay" id="fix-modal" style="display:none" onclick="closeFixModal()">
+            <div class="modal-box" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <div>
+                        <div class="modal-title-label">Fix track</div>
+                        <div class="modal-track-name" id="fix-track-name"></div>
+                        <div class="modal-track-artist" id="fix-track-artist"></div>
+                    </div>
+                    <button class="modal-close" onclick="closeFixModal()">&times;</button>
+                </div>
+                <div class="modal-search">
+                    <input type="text" id="fix-search-input" placeholder="Search Spotify..." onkeydown="if(event.key==='Enter')searchFix()">
+                    <button class="fix-search-btn" onclick="searchFix()">Search</button>
+                </div>
+                <div class="modal-results" id="fix-results">
+                    <div class="modal-empty">Click Search to find alternatives on Spotify</div>
+                </div>
+            </div>
         </div>
-        <div class="license">
-            <a href="https://github.com/lor3nzo/SpotifyUploader" target="_blank">GNU General Public License v3</a>
-        </div>
+
+        <div class="footer"></div>
     </div>
+
+    <!-- Hidden audio element for previews -->
+    <audio id="preview-audio" preload="none"></audio>
 
     <script>
         // ============================================
@@ -448,10 +536,14 @@
         const REDIRECT_URI = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://localhost:5500'
             : 'https://osgk.com/spotify';
-        const SCOPES = 'playlist-modify-public playlist-modify-private';
+        const SCOPES = 'playlist-modify-public playlist-modify-private playlist-read-private';
 
         // In-memory token storage (never persisted)
         let accessToken = null;
+        let tokenExpiresAt = null;
+
+        // Track fixes: index -> matchData object (from fix modal)
+        const fixedTracks = {};
 
         // ============================================
         // PKCE HELPERS
@@ -479,15 +571,11 @@
         // AUTH FLOW
         // ============================================
         async function loginWithSpotify() {
-            // Generate PKCE code verifier and challenge
             const codeVerifier = generateRandomString(64);
             const hashed = await sha256(codeVerifier);
             const codeChallenge = base64urlEncode(hashed);
-
-            // Store verifier in sessionStorage (needed for callback, cleared on tab close)
             sessionStorage.setItem('code_verifier', codeVerifier);
 
-            // Build auth URL
             const params = new URLSearchParams({
                 client_id: CLIENT_ID,
                 response_type: 'code',
@@ -505,21 +593,12 @@
             const params = new URLSearchParams(window.location.search);
             const code = params.get('code');
             const error = params.get('error');
-
-            if (error) {
-                console.error('Auth error:', error);
-                return;
-            }
-
-            if (!code) return; // Not a callback, normal page load
+            if (error) { console.error('Auth error:', error); return; }
+            if (!code) return;
 
             const codeVerifier = sessionStorage.getItem('code_verifier');
-            if (!codeVerifier) {
-                console.error('No code verifier found');
-                return;
-            }
+            if (!codeVerifier) { console.error('No code verifier found'); return; }
 
-            // Exchange code for token
             try {
                 const response = await fetch('https://accounts.spotify.com/api/token', {
                     method: 'POST',
@@ -537,14 +616,11 @@
 
                 if (data.access_token) {
                     accessToken = data.access_token;
-                    // Log the granted scope for debugging
+                    tokenExpiresAt = Date.now() + (data.expires_in * 1000);
                     console.log('Granted scope:', data.scope);
+                    console.log('Token expires in:', data.expires_in, 'seconds');
                     sessionStorage.removeItem('code_verifier');
-
-                    // Clean URL (remove code from address bar)
                     window.history.replaceState({}, document.title, window.location.pathname);
-
-                    // Fetch user profile and show app
                     await showLoggedInState();
                 } else {
                     console.error('Token exchange failed:', data);
@@ -560,10 +636,8 @@
                     headers: { 'Authorization': `Bearer ${accessToken}` }
                 });
                 const user = await response.json();
-
                 document.getElementById('user-name').textContent = user.display_name || user.id;
                 document.getElementById('user-initial').textContent = (user.display_name || user.id).charAt(0).toUpperCase();
-
                 document.getElementById('login-section').style.display = 'none';
                 document.getElementById('app-section').style.display = 'flex';
             } catch (err) {
@@ -573,9 +647,50 @@
 
         function logout() {
             accessToken = null;
+            tokenExpiresAt = null;
             document.getElementById('login-section').style.display = 'flex';
             document.getElementById('app-section').style.display = 'none';
+            hideTokenWarning();
         }
+
+        // ============================================
+        // TOKEN EXPIRY HANDLING
+        // ============================================
+        function checkToken() {
+            if (!accessToken || !tokenExpiresAt) return 'expired';
+            const remaining = tokenExpiresAt - Date.now();
+            if (remaining <= 0) return 'expired';
+            if (remaining < 60000) return 'expiring';
+            return 'valid';
+        }
+
+        function showTokenWarning(message, isExpired) {
+            let banner = document.getElementById('token-warning');
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'token-warning';
+                const appSection = document.getElementById('app-section');
+                appSection.insertBefore(banner, appSection.firstChild);
+            }
+            banner.className = isExpired ? 'token-banner token-expired' : 'token-banner token-expiring';
+            banner.innerHTML = `<span>${message}</span><button onclick="loginWithSpotify()" class="token-reauth-btn">${isExpired ? 'Log in again' : 'Refresh now'}</button>`;
+            banner.style.display = 'flex';
+        }
+
+        function hideTokenWarning() {
+            const banner = document.getElementById('token-warning');
+            if (banner) banner.style.display = 'none';
+        }
+
+        setInterval(() => {
+            if (!accessToken) return;
+            const status = checkToken();
+            if (status === 'expired') { showTokenWarning('Session expired.', true); }
+            else if (status === 'expiring') {
+                const secs = Math.round((tokenExpiresAt - Date.now()) / 1000);
+                showTokenWarning(`Session expires in ${secs}s.`, false);
+            } else { hideTokenWarning(); }
+        }, 15000);
 
         // ============================================
         // INIT: Check if this is a callback
@@ -583,7 +698,7 @@
         handleCallback();
 
         // ============================================
-        // PHASE 3: FILE UPLOAD + PARSING
+        // FILE UPLOAD + PARSING (CSV, JSON, TXT, PASTE)
         // ============================================
         let parsedTracks = [];
 
@@ -591,77 +706,127 @@
         const dropZone = document.getElementById('drop-zone');
         const playlistNameInput = document.getElementById('playlist-name');
 
-        // File input change
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length) handleFile(e.target.files[0]);
         });
 
-        // Drag and drop
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('drag-over');
-        });
-
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('drag-over');
-        });
-
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+        dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('drag-over'); });
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.classList.remove('drag-over');
             if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
         });
 
+        function togglePaste() {
+            const area = document.getElementById('paste-area');
+            area.style.display = area.style.display === 'none' || !area.style.display ? 'block' : 'none';
+        }
+
+        function handlePaste() {
+            const text = document.getElementById('paste-input').value.trim();
+            if (!text) { alert('Please paste some tracks first.'); return; }
+            if (!playlistNameInput.value) playlistNameInput.value = 'Pasted Playlist';
+            parseTXT(text);
+            document.getElementById('paste-area').style.display = 'none';
+            document.getElementById('paste-input').value = '';
+        }
+
         function handleFile(file) {
-            if (!file.name.toLowerCase().endsWith('.csv')) {
-                alert('Please upload a .csv file');
+            const name = file.name.toLowerCase();
+            if (!name.endsWith('.csv') && !name.endsWith('.json') && !name.endsWith('.txt')) {
+                alert('Please upload a .csv, .json, or .txt file');
                 return;
             }
 
-            // Auto-fill playlist name from filename (strip .csv extension)
-            const nameFromFile = file.name.replace(/\.csv$/i, '').trim();
-            if (!playlistNameInput.value) {
-                playlistNameInput.value = nameFromFile;
-            }
+            const nameFromFile = file.name.replace(/\.(csv|json|txt)$/i, '').trim();
+            if (!playlistNameInput.value) playlistNameInput.value = nameFromFile;
 
             const reader = new FileReader();
             reader.onload = (e) => {
-                parseCSV(e.target.result);
+                const text = e.target.result;
+                if (name.endsWith('.json')) parseJSON(text);
+                else if (name.endsWith('.txt')) parseTXT(text);
+                else parseCSV(text);
             };
             reader.readAsText(file);
+        }
+
+        function parseJSON(text) {
+            try {
+                const data = JSON.parse(text);
+                const arr = Array.isArray(data) ? data : data.tracks || data.songs || [];
+                parsedTracks = arr
+                    .filter(item => item.track || item.title || item.song || item.name)
+                    .map(item => ({
+                        track: (item.track || item.title || item.song || item.name || '').trim(),
+                        artist: (item.artist || item.artists || '').trim(),
+                        searchQuery: (item.search_query || item.searchQuery || '').trim() || undefined
+                    }))
+                    .filter(t => t.track && t.artist);
+
+                if (parsedTracks.length === 0) { alert('No tracks found. JSON should be [{track, artist}, ...]'); return; }
+                renderPreview();
+            } catch (err) {
+                alert('Invalid JSON file: ' + err.message);
+            }
+        }
+
+        function parseTXT(text) {
+            const lines = text.trim().split('\n');
+            parsedTracks = [];
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (!trimmed) continue;
+                // Try "track - artist" or "track, artist"
+                let parts = trimmed.includes(' - ') ? trimmed.split(' - ') : trimmed.split(',');
+                if (parts.length >= 2) {
+                    parsedTracks.push({
+                        track: parts[0].trim(),
+                        artist: parts.slice(1).join(',').trim()
+                    });
+                }
+            }
+            if (parsedTracks.length === 0) { alert('No tracks found. Use format: track - artist (one per line)'); return; }
+            renderPreview();
         }
 
         function parseCSV(text) {
             const lines = text.trim().split('\n');
             parsedTracks = [];
 
-            for (let i = 0; i < lines.length; i++) {
+            let trackCol = 0, artistCol = 1, searchQueryCol = -1, startRow = 0;
+
+            if (lines.length > 0) {
+                const headerLower = lines[0].toLowerCase();
+                if (headerLower.includes('track') || headerLower.includes('song') || headerLower.includes('title')) {
+                    const headerParts = parseCSVLine(lines[0]).map(h => h.trim().toLowerCase());
+                    trackCol = headerParts.findIndex(h => h === 'track_name' || h === 'track' || h === 'song' || h === 'title');
+                    artistCol = headerParts.findIndex(h => h === 'artist');
+                    searchQueryCol = headerParts.findIndex(h => h === 'search_query');
+                    if (trackCol === -1) trackCol = 0;
+                    if (artistCol === -1) artistCol = 1;
+                    startRow = 1;
+                }
+            }
+
+            for (let i = startRow; i < lines.length; i++) {
                 const line = lines[i].trim();
                 if (!line) continue;
-
-                // Check if first line is a header row
-                if (i === 0) {
-                    const lower = line.toLowerCase();
-                    if (lower.includes('track') && lower.includes('artist')) continue;
-                    if (lower.includes('song') && lower.includes('artist')) continue;
-                    if (lower.includes('title') && lower.includes('artist')) continue;
-                }
-
-                // Parse CSV: handle quoted fields
                 const parts = parseCSVLine(line);
                 if (parts.length >= 2) {
-                    parsedTracks.push({
-                        track: parts[0].trim(),
-                        artist: parts[1].trim()
-                    });
+                    const entry = {
+                        track: parts[trackCol]?.trim() || '',
+                        artist: parts[artistCol]?.trim() || ''
+                    };
+                    if (searchQueryCol >= 0 && parts[searchQueryCol]) {
+                        entry.searchQuery = parts[searchQueryCol].trim();
+                    }
+                    if (entry.track && entry.artist) parsedTracks.push(entry);
                 }
             }
 
-            if (parsedTracks.length === 0) {
-                alert('No tracks found. Make sure your CSV has: track, artist');
-                return;
-            }
-
+            if (parsedTracks.length === 0) { alert('No tracks found. Make sure your CSV has: track, artist'); return; }
             renderPreview();
         }
 
@@ -669,17 +834,11 @@
             const result = [];
             let current = '';
             let inQuotes = false;
-
             for (let i = 0; i < line.length; i++) {
                 const ch = line[i];
-                if (ch === '"') {
-                    inQuotes = !inQuotes;
-                } else if (ch === ',' && !inQuotes) {
-                    result.push(current);
-                    current = '';
-                } else {
-                    current += ch;
-                }
+                if (ch === '"') { inQuotes = !inQuotes; }
+                else if (ch === ',' && !inQuotes) { result.push(current); current = ''; }
+                else { current += ch; }
             }
             result.push(current);
             return result;
@@ -692,7 +851,8 @@
 
             trackCount.textContent = `${parsedTracks.length} track${parsedTracks.length !== 1 ? 's' : ''}`;
             trackList.innerHTML = parsedTracks.map((t, i) => `
-                <div class="track-row">
+                <div class="track-row" draggable="true" data-index="${i}">
+                    <span class="drag-handle" title="Drag to reorder">⠿</span>
                     <span class="track-num">${i + 1}</span>
                     <div class="track-info">
                         <span class="track-title">${escapeHTML(t.track)}</span>
@@ -702,7 +862,12 @@
             `).join('');
 
             dropZone.style.display = 'none';
+            document.querySelector('.paste-toggle').style.display = 'none';
+            document.getElementById('paste-area').style.display = 'none';
             previewSection.style.display = 'block';
+            document.getElementById('undo-btn').style.display = 'none';
+
+            initDragAndDrop();
         }
 
         function clearFile() {
@@ -710,6 +875,7 @@
             fileInput.value = '';
             document.getElementById('preview-section').style.display = 'none';
             dropZone.style.display = 'block';
+            document.querySelector('.paste-toggle').style.display = 'inline';
         }
 
         function escapeHTML(str) {
@@ -719,110 +885,309 @@
         }
 
         // ============================================
-        // PHASE 4+5: SEARCH + CREATE PLAYLIST + PUSH
+        // DRAG AND DROP REORDER
         // ============================================
+        let dragSrcIndex = null;
+
+        function initDragAndDrop() {
+            const rows = document.querySelectorAll('.track-row');
+            rows.forEach(row => {
+                row.addEventListener('dragstart', (e) => {
+                    dragSrcIndex = parseInt(row.dataset.index);
+                    row.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', dragSrcIndex);
+                });
+
+                row.addEventListener('dragend', () => {
+                    row.classList.remove('dragging');
+                    document.querySelectorAll('.track-row').forEach(r => r.classList.remove('drag-over-row'));
+                });
+
+                row.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    document.querySelectorAll('.track-row').forEach(r => r.classList.remove('drag-over-row'));
+                    row.classList.add('drag-over-row');
+                });
+
+                row.addEventListener('dragleave', () => {
+                    row.classList.remove('drag-over-row');
+                });
+
+                row.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    row.classList.remove('drag-over-row');
+                    const destIndex = parseInt(row.dataset.index);
+                    if (dragSrcIndex === null || dragSrcIndex === destIndex) return;
+
+                    // Reorder parsedTracks
+                    const [moved] = parsedTracks.splice(dragSrcIndex, 1);
+                    parsedTracks.splice(destIndex, 0, moved);
+
+                    // Re-render
+                    renderPreview();
+                });
+            });
+        }
+
+        // ============================================
+        // AUDIO PREVIEW (30-second clips)
+        // ============================================
+        const previewAudio = document.getElementById('preview-audio');
+        let currentPreviewIndex = null;
+
+        previewAudio.addEventListener('ended', () => {
+            stopPreview();
+        });
+
+        function playPreview(url, index) {
+            if (currentPreviewIndex === index) {
+                stopPreview();
+                return;
+            }
+            stopPreview();
+            previewAudio.src = url;
+            previewAudio.play().catch(() => {});
+            currentPreviewIndex = index;
+            // Update button state
+            const btn = document.querySelector(`.preview-btn[data-index="${index}"]`);
+            if (btn) { btn.textContent = '⏸'; btn.classList.add('playing'); }
+        }
+
+        function stopPreview() {
+            previewAudio.pause();
+            previewAudio.src = '';
+            if (currentPreviewIndex !== null) {
+                const btn = document.querySelector(`.preview-btn[data-index="${currentPreviewIndex}"]`);
+                if (btn) { btn.textContent = '▶'; btn.classList.remove('playing'); }
+            }
+            currentPreviewIndex = null;
+        }
+
+        // ============================================
+        // SEARCH TRACK (two-pass)
+        // ============================================
+        async function searchTrack(track, artist, searchQuery) {
+            const strictQuery = searchQuery ? searchQuery : `track:${track} artist:${artist}`;
+            try {
+                const res = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(strictQuery)}&type=track&limit=5`, {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                const data = await res.json();
+                if (data.tracks?.items?.length > 0) return extractTrackInfo(data.tracks.items[0]);
+            } catch (err) {
+                console.error(`Strict search failed for "${track}" by "${artist}":`, err);
+            }
+
+            if (searchQuery) return null;
+            const looseQuery = `${track} ${artist}`;
+            try {
+                const res = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(looseQuery)}&type=track&limit=5`, {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                const data = await res.json();
+                if (data.tracks?.items?.length > 0) {
+                    console.log(`Loose search rescued: "${track}" by "${artist}"`);
+                    return extractTrackInfo(data.tracks.items[0]);
+                }
+            } catch (err) {
+                console.error(`Loose search failed for "${track}" by "${artist}":`, err);
+            }
+            return null;
+        }
+
+        function extractTrackInfo(item) {
+            return {
+                uri: item.uri,
+                name: item.name,
+                artist: item.artists.map(a => a.name).join(', '),
+                album: item.album?.name || '',
+                art: item.album?.images?.[2]?.url || item.album?.images?.[0]?.url || '',
+                year: item.album?.release_date?.substring(0, 4) || '',
+                previewUrl: item.preview_url || null
+            };
+        }
+
+        function markTrackStatus(index, status, matchData) {
+            const rows = document.querySelectorAll('.track-row');
+            if (!rows[index]) return;
+
+            const indicator = rows[index].querySelector('.track-num');
+            // Remove existing dynamic elements
+            rows[index].querySelector('.fix-btn')?.remove();
+            rows[index].querySelector('.match-detail')?.remove();
+            rows[index].querySelector('.preview-btn')?.remove();
+
+            if (status === 'found') {
+                indicator.innerHTML = '<span style="color: var(--spotify-green);">&#10003;</span>';
+
+                if (matchData?.name) {
+                    const detail = document.createElement('div');
+                    detail.className = 'match-detail';
+                    detail.innerHTML = `
+                        ${matchData.art ? `<img src="${matchData.art}" class="match-art" alt="">` : ''}
+                        <span class="match-text">${escapeHTML(matchData.name)} · ${escapeHTML(matchData.album)}${matchData.year ? ' (' + matchData.year + ')' : ''}</span>
+                    `;
+                    rows[index].querySelector('.track-info').appendChild(detail);
+                }
+
+                // Preview button
+                if (matchData?.previewUrl) {
+                    const playBtn = document.createElement('button');
+                    playBtn.className = 'preview-btn';
+                    playBtn.dataset.index = index;
+                    playBtn.textContent = '▶';
+                    playBtn.title = 'Preview 30s clip';
+                    playBtn.onclick = (e) => { e.stopPropagation(); playPreview(matchData.previewUrl, index); };
+                    rows[index].insertBefore(playBtn, rows[index].querySelector('.fix-btn') || null);
+                }
+
+                // Swap button
+                const btn = document.createElement('button');
+                btn.className = 'fix-btn fixed';
+                btn.textContent = 'Swap';
+                btn.onclick = (e) => { e.stopPropagation(); openFixModal(index); };
+                rows[index].appendChild(btn);
+            } else {
+                indicator.innerHTML = '<span style="color: #e74c3c;">&#10007;</span>';
+                const btn = document.createElement('button');
+                btn.className = 'fix-btn';
+                btn.textContent = 'Fix';
+                btn.onclick = (e) => { e.stopPropagation(); openFixModal(index); };
+                rows[index].appendChild(btn);
+            }
+        }
+
+        // ============================================
+        // DUPLICATE DETECTION
+        // ============================================
+        async function checkDuplicatePlaylist(name) {
+            try {
+                const res = await fetch('https://api.spotify.com/v1/me/playlists?limit=50', {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                const data = await res.json();
+                const match = data.items?.find(p => p.name.toLowerCase() === name.toLowerCase());
+                return match || null;
+            } catch (err) {
+                console.error('Duplicate check failed:', err);
+                return null;
+            }
+        }
+
+        // ============================================
+        // PUSH TO SPOTIFY
+        // ============================================
+        let currentPlaylistId = null;
+        let currentPlaylistUrl = null;
+        const pushedTracks = new Set();
+        let allPushedURIs = []; // for undo
+
         async function pushToSpotify() {
-            if (!accessToken) {
-                alert('Please log in with Spotify first.');
+            if (!accessToken) { alert('Please log in with Spotify first.'); return; }
+            if (checkToken() === 'expired') {
+                showTokenWarning('Session expired. Please log in again before pushing.', true);
                 return;
             }
 
             const pushBtn = document.getElementById('push-btn');
             pushBtn.disabled = true;
+
+            // Duplicate detection (only on first push)
+            if (!currentPlaylistId) {
+                const name = playlistNameInput.value.trim() || 'My Playlist';
+                pushBtn.textContent = 'Checking for duplicates...';
+                const existing = await checkDuplicatePlaylist(name);
+                if (existing) {
+                    const reuse = confirm(`You already have a playlist named "${name}". Add tracks to the existing one?\n\nOK = Add to existing\nCancel = Create new`);
+                    if (reuse) {
+                        currentPlaylistId = existing.id;
+                        currentPlaylistUrl = existing.external_urls.spotify;
+                    }
+                }
+            }
+
             pushBtn.textContent = 'Searching tracks...';
 
             try {
-                // Step 1: Search for each track
-                const trackURIs = [];
+                const newTracks = [];
                 const notFound = [];
 
                 for (let i = 0; i < parsedTracks.length; i++) {
                     const t = parsedTracks[i];
                     pushBtn.textContent = `Searching ${i + 1} of ${parsedTracks.length}...`;
 
-                    const uri = await searchTrack(t.track, t.artist);
-                    if (uri) {
-                        trackURIs.push(uri);
-                        markTrackStatus(i, 'found');
+                    if (pushedTracks.has(i)) continue;
+
+                    if (fixedTracks[i]) {
+                        newTracks.push({ index: i, uri: fixedTracks[i].uri || fixedTracks[i] });
+                        markTrackStatus(i, 'found', fixedTracks[i]);
                     } else {
-                        notFound.push(t);
-                        markTrackStatus(i, 'not-found');
+                        const result = await searchTrack(t.track, t.artist, t.searchQuery);
+                        if (result) {
+                            newTracks.push({ index: i, uri: result.uri });
+                            markTrackStatus(i, 'found', result);
+                        } else {
+                            notFound.push({ index: i, ...t });
+                            markTrackStatus(i, 'not-found');
+                        }
                     }
 
-                    // Small delay to respect rate limits
-                    if (i < parsedTracks.length - 1) {
-                        await sleep(100);
-                    }
+                    if (i < parsedTracks.length - 1) await sleep(100);
                 }
 
-                if (trackURIs.length === 0) {
-                    alert('No tracks could be matched on Spotify.');
-                    pushBtn.disabled = false;
-                    pushBtn.textContent = 'Push to Spotify';
+                if (newTracks.length === 0 && notFound.length > 0) {
+                    showPartialSuccess(pushedTracks.size, notFound.length);
+                    return;
+                }
+                if (newTracks.length === 0 && notFound.length === 0) {
+                    showSuccess({ external_urls: { spotify: currentPlaylistUrl } }, pushedTracks.size, 0);
                     return;
                 }
 
-                console.log(`Matched ${trackURIs.length} of ${parsedTracks.length} tracks`);
-                console.log('Track URIs:', trackURIs);
+                const trackURIs = newTracks.map(t => t.uri);
 
-                // Step 2: Get user ID
-                pushBtn.textContent = 'Creating playlist...';
-                const userRes = await fetch('https://api.spotify.com/v1/me', {
-                    headers: { 'Authorization': `Bearer ${accessToken}` }
-                });
-                const user = await userRes.json();
-                console.log('User ID:', user.id);
+                if (!currentPlaylistId) {
+                    pushBtn.textContent = 'Creating playlist...';
+                    const userRes = await fetch('https://api.spotify.com/v1/me', {
+                        headers: { 'Authorization': `Bearer ${accessToken}` }
+                    });
+                    const user = await userRes.json();
+                    if (!user.id) throw new Error(`Failed to get user profile: ${user.error?.message || 'token may have expired'}`);
 
-                if (!user.id) {
-                    throw new Error(`Failed to get user profile: ${user.error?.message || 'token may have expired'}`);
+                    const playlistName = playlistNameInput.value.trim() || 'My Playlist';
+                    const createRes = await fetch(`https://api.spotify.com/v1/me/playlists`, {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: playlistName, description: 'Created via Playlist Uploader', public: true })
+                    });
+                    const playlist = await createRes.json();
+                    if (!playlist.id) throw new Error(`Failed to create playlist: ${playlist.error?.message || JSON.stringify(playlist)}`);
+
+                    currentPlaylistId = playlist.id;
+                    currentPlaylistUrl = playlist.external_urls.spotify;
                 }
 
-                // Step 3: Create playlist
-                const playlistName = playlistNameInput.value.trim() || 'My Playlist';
-                const createRes = await fetch(`https://api.spotify.com/v1/me/playlists`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        name: playlistName,
-                        description: `Created via Playlist Uploader`,
-                        public: true
-                    })
-                });
-                console.log('Create playlist status:', createRes.status);
-                const playlist = await createRes.json();
-                console.log('Create playlist response:', JSON.stringify(playlist));
-
-                if (!playlist.id) {
-                    console.error('Playlist creation response:', JSON.stringify(playlist));
-                    throw new Error(`Failed to create playlist: ${playlist.error?.message || JSON.stringify(playlist)}`);
-                }
-
-                // Step 4: Add tracks in batches of 100
                 pushBtn.textContent = 'Adding tracks...';
                 for (let i = 0; i < trackURIs.length; i += 100) {
                     const batch = trackURIs.slice(i, i + 100);
-                    console.log(`Adding batch of ${batch.length} tracks:`, batch.slice(0, 3), '...');
-                    const addRes = await fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/items`, {
+                    const addRes = await fetch(`https://api.spotify.com/v1/playlists/${currentPlaylistId}/items`, {
                         method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`,
-                            'Content-Type': 'application/json'
-                        },
+                        headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
                         body: JSON.stringify({ uris: batch })
                     });
-                    console.log('Add tracks status:', addRes.status);
                     const addData = await addRes.json();
-                    console.log('Add tracks response:', JSON.stringify(addData));
-                    if (!addRes.ok) {
-                        throw new Error(`Failed to add tracks: ${addData.error?.message || addRes.status}`);
-                    }
+                    if (!addRes.ok) throw new Error(`Failed to add tracks: ${addData.error?.message || addRes.status}`);
                 }
 
-                // Step 5: Show success
-                showSuccess(playlist, trackURIs.length, notFound.length);
+                newTracks.forEach(t => { pushedTracks.add(t.index); allPushedURIs.push(t.uri); });
+
+                if (notFound.length > 0) {
+                    showPartialSuccess(pushedTracks.size, notFound.length);
+                } else {
+                    showSuccess({ external_urls: { spotify: currentPlaylistUrl } }, pushedTracks.size, 0);
+                }
 
             } catch (err) {
                 console.error('Push error:', err);
@@ -832,72 +1197,263 @@
             }
         }
 
-        async function searchTrack(track, artist) {
-            const query = encodeURIComponent(`track:${track} artist:${artist}`);
-            try {
-                const res = await fetch(`https://api.spotify.com/v1/search?q=${query}&type=track&limit=1`, {
-                    headers: { 'Authorization': `Bearer ${accessToken}` }
-                });
-                const data = await res.json();
-                if (data.tracks && data.tracks.items && data.tracks.items.length > 0) {
-                    return data.tracks.items[0].uri;
-                }
-            } catch (err) {
-                console.error(`Search failed for "${track}" by "${artist}":`, err);
+        function showPartialSuccess(matched, missed) {
+            const pushBtn = document.getElementById('push-btn');
+            let statusEl = document.getElementById('partial-status');
+            if (!statusEl) {
+                statusEl = document.createElement('div');
+                statusEl.id = 'partial-status';
+                statusEl.style.cssText = 'text-align:center; padding:0.75rem; margin-bottom:0.75rem; border-radius:10px;';
+                document.getElementById('preview-section').insertBefore(statusEl, document.getElementById('preview-section').firstChild);
             }
-            return null;
-        }
+            statusEl.style.background = 'rgba(231, 76, 60, 0.1)';
+            statusEl.style.border = '1px solid rgba(231, 76, 60, 0.25)';
+            statusEl.innerHTML = `
+                <span style="color: var(--spotify-green); font-weight:600;">${matched} added ✓</span>
+                <span style="color: var(--text-secondary);"> · </span>
+                <span style="color: #e74c3c; font-weight:600;">${missed} not found</span>
+                <span style="color: var(--text-secondary);"> — fix them below, then retry</span>
+                <button onclick="exportFailed()" class="export-failed-btn">Export failed CSV</button>
+            `;
+            pushBtn.disabled = false;
+            pushBtn.textContent = `Retry ${missed} remaining`;
 
-        function markTrackStatus(index, status) {
-            const rows = document.querySelectorAll('.track-row');
-            if (rows[index]) {
-                const indicator = rows[index].querySelector('.track-num');
-                if (status === 'found') {
-                    indicator.innerHTML = '<span style="color: var(--spotify-green);">&#10003;</span>';
-                } else {
-                    indicator.innerHTML = '<span style="color: #e74c3c;">&#10007;</span>';
-                }
+            // Show undo button
+            if (allPushedURIs.length > 0) {
+                document.getElementById('undo-btn').style.display = 'block';
             }
         }
 
         function showSuccess(playlist, matched, missed) {
             const previewSection = document.getElementById('preview-section');
-            previewSection.innerHTML = `
-                <div style="text-align:center; padding: 1.5rem 0;">
-                    <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">&#127925;</div>
-                    <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem;">Playlist created!</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.25rem;">
-                        ${matched} track${matched !== 1 ? 's' : ''} added${missed > 0 ? `, ${missed} not found` : ''}
-                    </p>
-                    <a href="${playlist.external_urls.spotify}" target="_blank" 
-                       style="display:inline-block; margin-top:1rem; background:var(--spotify-green); color:#000; 
-                              padding:0.7rem 1.75rem; border-radius:50px; text-decoration:none; font-weight:600; font-size:0.95rem;">
-                        Open in Spotify
-                    </a>
-                    <br>
-                    <button onclick="resetUploader()" style="margin-top:1rem; background:none; border:1px solid var(--border); 
-                            color:var(--text-secondary); padding:0.5rem 1.25rem; border-radius:50px; font-family:'DM Sans',sans-serif; 
-                            font-size:0.85rem; cursor:pointer;">
-                        Upload another
-                    </button>
-                </div>
+            const pushBtn = document.getElementById('push-btn');
+
+            const partial = document.getElementById('partial-status');
+            if (partial) partial.remove();
+
+            let banner = document.getElementById('success-banner');
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'success-banner';
+                banner.style.cssText = 'text-align:center; padding:1.25rem; margin-bottom:0.75rem; border-radius:12px; background:rgba(29,185,84,0.08); border:1px solid rgba(29,185,84,0.25);';
+                previewSection.insertBefore(banner, previewSection.firstChild);
+            }
+
+            const spotifyUrl = playlist.external_urls?.spotify || currentPlaylistUrl;
+            banner.innerHTML = `
+                <div style="font-size:1.8rem; margin-bottom:0.5rem;">&#127925;</div>
+                <p style="font-size:1rem; font-weight:600; margin-bottom:0.2rem;">Playlist created!</p>
+                <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:0.75rem;">
+                    ${matched} track${matched !== 1 ? 's' : ''} added${missed > 0 ? `, <span style="color:#e74c3c;">${missed} not found</span>` : ''}
+                </p>
+                ${missed > 0 ? '<button onclick="exportFailed()" class="export-failed-btn" style="margin-bottom:0.75rem;">Export failed CSV</button><br>' : ''}
+                <a href="${spotifyUrl}" target="_blank"
+                   style="display:inline-block; background:var(--spotify-green); color:#000;
+                          padding:0.6rem 1.5rem; border-radius:50px; text-decoration:none; font-weight:600; font-size:0.9rem;">
+                    Open in Spotify
+                </a>
             `;
+
+            if (missed > 0) {
+                pushBtn.disabled = false;
+                pushBtn.textContent = `Retry ${missed} remaining`;
+            } else {
+                pushBtn.textContent = 'All tracks added ✓';
+                pushBtn.disabled = true;
+                let resetBtn = document.getElementById('reset-after-success');
+                if (!resetBtn) {
+                    resetBtn = document.createElement('button');
+                    resetBtn.id = 'reset-after-success';
+                    resetBtn.className = 'logout-btn';
+                    resetBtn.style.cssText = 'margin-top:0.75rem; width:100%;';
+                    resetBtn.textContent = 'Upload another';
+                    resetBtn.onclick = resetUploader;
+                    pushBtn.parentNode.insertBefore(resetBtn, pushBtn.nextSibling);
+                }
+            }
+
+            // Show undo button
+            if (allPushedURIs.length > 0) {
+                document.getElementById('undo-btn').style.display = 'block';
+            }
+        }
+
+        // ============================================
+        // UNDO: Remove all pushed tracks from playlist
+        // ============================================
+        async function undoLastPush() {
+            if (!currentPlaylistId || allPushedURIs.length === 0) return;
+            if (!confirm(`Remove all ${allPushedURIs.length} tracks from the Spotify playlist?\n\nThis cannot be undone.`)) return;
+
+            const undoBtn = document.getElementById('undo-btn');
+            undoBtn.textContent = 'Removing tracks...';
+            undoBtn.disabled = true;
+
+            try {
+                // Spotify DELETE requires tracks as [{uri: "..."}, ...]
+                // Max 100 per request
+                for (let i = 0; i < allPushedURIs.length; i += 100) {
+                    const batch = allPushedURIs.slice(i, i + 100).map(uri => ({ uri }));
+                    const res = await fetch(`https://api.spotify.com/v1/playlists/${currentPlaylistId}/tracks`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ tracks: batch })
+                    });
+                    if (!res.ok) {
+                        const errData = await res.json();
+                        throw new Error(errData.error?.message || res.status);
+                    }
+                }
+
+                alert(`Removed ${allPushedURIs.length} tracks from playlist.`);
+                allPushedURIs = [];
+                pushedTracks.clear();
+                undoBtn.style.display = 'none';
+
+                // Reset track statuses visually
+                renderPreview();
+                // Remove banners
+                document.getElementById('success-banner')?.remove();
+                document.getElementById('partial-status')?.remove();
+                document.getElementById('reset-after-success')?.remove();
+
+            } catch (err) {
+                console.error('Undo error:', err);
+                alert('Failed to remove tracks: ' + err.message);
+            }
+
+            undoBtn.disabled = false;
+            undoBtn.textContent = 'Undo: Remove all tracks from playlist';
         }
 
         function resetUploader() {
             parsedTracks = [];
+            Object.keys(fixedTracks).forEach(k => delete fixedTracks[k]);
+            pushedTracks.clear();
+            allPushedURIs = [];
+            currentPlaylistId = null;
+            currentPlaylistUrl = null;
             fileInput.value = '';
             playlistNameInput.value = '';
+
+            document.getElementById('success-banner')?.remove();
+            document.getElementById('partial-status')?.remove();
+            document.getElementById('reset-after-success')?.remove();
+
             document.getElementById('preview-section').style.display = 'none';
-            document.getElementById('preview-section').innerHTML = `
-                <div class="preview-header">
-                    <span id="track-count"></span>
-                    <button class="clear-btn" onclick="clearFile()">Clear</button>
-                </div>
-                <div class="track-list" id="track-list"></div>
-                <button class="push-btn" id="push-btn" onclick="pushToSpotify()">Push to Spotify</button>
-            `;
+            document.getElementById('track-list').innerHTML = '';
+            document.getElementById('push-btn').disabled = false;
+            document.getElementById('push-btn').textContent = 'Push to Spotify';
+            document.getElementById('undo-btn').style.display = 'none';
             dropZone.style.display = 'block';
+            document.querySelector('.paste-toggle').style.display = 'inline';
+            stopPreview();
+        }
+
+        // ============================================
+        // FIX MODAL: Search & select alternatives
+        // ============================================
+        let fixingIndex = null;
+        let fixSearchResults = [];
+
+        function openFixModal(index) {
+            fixingIndex = index;
+            const t = parsedTracks[index];
+            document.getElementById('fix-track-name').textContent = t.track;
+            document.getElementById('fix-track-artist').textContent = t.artist;
+            document.getElementById('fix-search-input').value = t.searchQuery || `${t.track} ${t.artist}`;
+            document.getElementById('fix-results').innerHTML = '<div class="modal-empty">Click Search to find alternatives on Spotify</div>';
+            document.getElementById('fix-modal').style.display = 'flex';
+            document.getElementById('fix-search-input').focus();
+            stopPreview();
+        }
+
+        function closeFixModal() {
+            document.getElementById('fix-modal').style.display = 'none';
+            fixingIndex = null;
+        }
+
+        async function searchFix() {
+            const query = document.getElementById('fix-search-input').value.trim();
+            if (!query || !accessToken) return;
+            if (checkToken() === 'expired') {
+                document.getElementById('fix-results').innerHTML = '<div class="modal-empty" style="color:#e74c3c;">Session expired. Close this and log in again.</div>';
+                return;
+            }
+
+            const btn = document.querySelector('.fix-search-btn');
+            const resultsDiv = document.getElementById('fix-results');
+            btn.disabled = true;
+            btn.textContent = 'Searching...';
+            resultsDiv.innerHTML = '<div class="modal-empty">Searching Spotify...</div>';
+
+            try {
+                const res = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=5`, {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                const data = await res.json();
+                const items = data.tracks?.items || [];
+
+                if (items.length === 0) {
+                    resultsDiv.innerHTML = '<div class="modal-empty">No results found. Try a different search.</div>';
+                } else {
+                    fixSearchResults = items;
+                    resultsDiv.innerHTML = items.map((item, idx) => {
+                        const art = item.album?.images?.[2]?.url || item.album?.images?.[0]?.url || '';
+                        const year = item.album?.release_date?.substring(0, 4) || '';
+                        const artists = item.artists.map(a => a.name).join(', ');
+                        const album = item.album?.name || '';
+                        return `
+                            <div class="modal-result-row" data-result-index="${idx}">
+                                ${art ? `<img class="result-art" src="${art}" alt="">` : '<div class="result-art"></div>'}
+                                <div class="result-info">
+                                    <div class="result-track">${escapeHTML(item.name)}</div>
+                                    <div class="result-meta">${escapeHTML(artists)} · ${escapeHTML(album)}${year ? ' · ' + year : ''}</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    resultsDiv.querySelectorAll('.modal-result-row').forEach(row => {
+                        row.addEventListener('click', () => {
+                            const idx = parseInt(row.dataset.resultIndex);
+                            selectFix(fixSearchResults[idx].uri);
+                        });
+                    });
+                }
+            } catch (err) {
+                resultsDiv.innerHTML = `<div class="modal-empty" style="color:#e74c3c;">Search failed: ${err.message}</div>`;
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Search';
+        }
+
+        function selectFix(uri) {
+            if (fixingIndex === null) return;
+            const resultItem = fixSearchResults.find(r => r.uri === uri);
+            const matchData = resultItem ? extractTrackInfo(resultItem) : { uri };
+            fixedTracks[fixingIndex] = matchData;
+            markTrackStatus(fixingIndex, 'found', matchData);
+            closeFixModal();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeFixModal();
+        });
+
+        function exportFailed() {
+            const failed = parsedTracks.filter((t, i) => !pushedTracks.has(i) && !fixedTracks[i]);
+            if (failed.length === 0) { alert('No failed tracks to export.'); return; }
+            const header = 'track_name,artist';
+            const esc = s => `"${(s || '').replace(/"/g, '""')}"`;
+            const rows = failed.map(t => [esc(t.track), esc(t.artist)].join(','));
+            const csv = [header, ...rows].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'failed_tracks.csv'; a.click();
+            URL.revokeObjectURL(url);
         }
 
         function sleep(ms) {
